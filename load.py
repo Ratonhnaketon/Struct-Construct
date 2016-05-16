@@ -1,4 +1,4 @@
-import pygame, images, audio
+import pygame, images
 
 # Load game and profile
 
@@ -6,7 +6,6 @@ path = "Profile/"
 
 def load():
 	check = 0
-	check += audio.load_audio()
 	check += images.load_image()
 	if check > 0:
 		print("Error:" + str(check))
@@ -33,7 +32,6 @@ def write_default(path):
 	f.write(str(pygame.display.Info().current_w) + " " + str(pygame.display.Info().current_h) + "\n")
 	pygame.quit()
 	f.write("0.4\n")
-	f.write("0.3\n")
 	f.write("1\n")	
 	f.write("None\n")
 	f.close()
@@ -51,22 +49,14 @@ def read_conf(f):
 	info['brightness'] =  i
 	i = []
 	for word in f.readline().split():
-		i.append(float(word))
-	info['sound'] =  i
-	i = []
-	for word in f.readline().split():
 		i.append(int(word))
 	info['mode'] =  i
 	info['save'] =  f.readline().split()
 	return info.copy()
      
 def load_everthing():
-	resources = [images.background_menu, images.Menubutton, images.Cab1, \
-	images.Cab2, images.Cab3, images.Cab4, images.Cab5, images.tronco1, \
-	images.tronco2, images.tronco3, images.braco1, images.braco11, images.seta, \
-	images.braco2, images.braco22, images.perna21, images.perna22, images.icon,\
-	images.eye]
-	return resources
+	return [images.background_menu, images.Menubutton, images.seta, 
+	images.GameMenu_menu, images.TijoloLayout, images.wood_stick]
 
 def change_conf(info, option):
 	if(option == 100):
