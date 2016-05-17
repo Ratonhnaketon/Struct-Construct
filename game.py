@@ -98,23 +98,23 @@ def run(conf, resources):
 			if active_menu == 2:
 				active_menu = select_challenge.execute_menu(screen, conf)
 				if active_menu == 2:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 1, conf)
 				if active_menu == 3:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 2, conf)
 				if active_menu == 4:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 3, conf)
 				if active_menu == 5:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 4, conf)
 				if active_menu == 6:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 5, conf)
 				if active_menu == 7:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 6, conf)
 				if active_menu == 8:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 7, conf)
 				if active_menu == 9:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 8, conf)
 				if active_menu == 10:
-					star(screen, resources, active_menu, conf)
+					star(screen, resources, 9, conf)
 
 			elif active_menu == 3:
 				star(screen, resources, 0, conf)
@@ -133,7 +133,9 @@ def star(screen, resources, gameMode, conf):
 	(110, 0), 2)
 	Exit = button(resources[1], font.render("Exit", True,  (255, 255, 255)), \
 	(220 , 0), 0)
-	mode_game = gameStage(resources[3], (Return, Restart, Exit), (), conf["size"], gameMode)
+	Finish = button(resources[1], font.render("Finish", True,  (255, 255, 255)), \
+	(screen.get_width() - resources[1].get_width() , 0), 5)
+	mode_game = gameStage(resources[3], (Return, Restart, Exit, Finish), (), conf["size"], gameMode)
 	active_menu = mode_game.execute_menu(screen, conf)
 	while True:
 		if active_menu == 0:
