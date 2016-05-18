@@ -56,7 +56,8 @@ def read_conf(f):
      
 def load_everthing():
 	return [images.background_menu, images.Menubutton, images.seta, 
-	images.GameMenu_menu, images.TijoloLayout, images.wood_stick]
+	images.GameMenu_menu, images.TijoloLayout, images.wood_stick, images.apoioFixo, 
+	images.apoioSimples]
 
 def change_conf(info, option):
 	if(option == 100):
@@ -134,7 +135,6 @@ def save_conf(info):
 	f = open(path + "conf.txt", "w") 
 	f.write(str(info['size'][0]) + " " +  str(info['size'][1]) + "\n")
 	f.write(str(info['brightness'][0]) + "\n")
-	f.write(str(info['sound'][0]) + "\n")
 	f.write(str(info['mode'][0]) + "\n")
 	f.write(str(info['save'][0]) + "\n")
 	f.close()

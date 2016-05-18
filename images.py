@@ -13,3 +13,5 @@ seta = pygame.image.load(path + "seta" + exten) # 2
 GameMenu_menu = pygame.image.load(path + "GameMenu" + exten)  # 3
 TijoloLayout = pygame.image.load(path + "tijolo" + exten)  # 4
 wood_stick = pygame.image.load(path + "wood_stick" + exten)  # 5
+apoioFixo = pygame.image.load(path + "apoioFixo" + exten)  # 6
+apoioSimples = pygame.image.load(path + "apoioSimples" + exten)  # 7

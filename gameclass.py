@@ -1,4 +1,5 @@
 import pygame, game, load, math, random
+from motor import *
 
 resources = load.load_everthing()
 
@@ -29,6 +30,7 @@ class Stage(object):
 			if button.active:
 				return button.function()
 
+	# Loop Central
 	def execute_menu(self, screen, conf):	
 		pygame.font.init()
 		while True:
@@ -61,16 +63,17 @@ class gameStage(Stage):
 			for bond in bar.bonds:
 				self.bonds.append(bond)
 
+		for ground in self.grounds:
+			self.bonds.append(ground.support.specialBond)
+
 	def createBar(self, number):
 		for i in range(number):
 			self.bars.append(barObject(gameStage.controlID))
 			gameStage.controlID += 1
 
-		self.generateBonds()	
-
 	def createGround(self, positions):
 		for i in range(len(positions)):
-			self.grounds.append(groundObject(positions[i], 0, i))
+			self.grounds.append(groundObject(positions[i], i))
 
 	def detectBar(self):
 		objectList = []
@@ -93,6 +96,11 @@ class gameStage(Stage):
 		for ground in self.grounds:
 			ground.print_ground(screen)
 
+	def start(**args):
+		pass
+		#self.createBar(args[0])
+
+	# Loop Central
 	def execute_menu(self, screen, conf):
 		pygame.font.init()
 		running = True
@@ -103,10 +111,10 @@ class gameStage(Stage):
 			pygame.time.set_timer(USEREVENT, 10)
 			if self.gameMode == 1:
 				timer.setTime(241)
-				self.createBar(14)
+				self.createBar(11)
 			elif self.gameMode == 2:
 				timer.setTime(211)
-				self.createBar(5)
+				self.createBar(9)
 			elif self.gameMode == 3:
 				timer.setTime(181)
 				self.createBar(5)
@@ -130,9 +138,12 @@ class gameStage(Stage):
 				self.createBar(5)
 		else:
 			self.createBar(10)
-			self.createGround([[0, 2*screen.get_height()/3], \
-			[2*screen.get_width()/3, 2*screen.get_height()/3]])
 
+		self.createGround([[0, screen.get_height()], \
+		[screen.get_width(), screen.get_height()]])
+		self.grounds[0].genSupport(70, 1)
+		self.grounds[1].genSupport(30, 0)
+		self.generateBonds()
 		try:
 			timer.start()
 		except:
@@ -161,8 +172,10 @@ class gameStage(Stage):
 							except:
 								pass
 						if command == 5:
-							# Gerar matriz de adjacência
-							pass
+							running = False
+							objectList = []
+							# engine = motor()
+							elements = []
 						else:
 							return command
 
@@ -315,7 +328,6 @@ class barObject(object):
 		random.randint(int(info['size'][1]/6), int(info['size'][1]/5))]
 		self.bonds = []
 		self.create_bond(2)
-		barObject.controlID += 2
 		self.id = identification
 		# Cria posicao falsa do cursor
 		cursor = (random.randint(-1000, 1000)), (random.randint(-1000, 1000))
@@ -393,24 +405,31 @@ class barObject(object):
 
 	def create_bond(self, number):
 		for i in range(number):
-			self.bonds.append(bond(i))
+			self.bonds.append(bond(barObject.controlID))
+			barObject.controlID += 1
 
 class groundObject(object):
-	def __init__(self, position, friction, identification):
+	def __init__(self, position, identification):
 		picture = resources[4]
 		resize = 1
 		self.image = pygame.transform.scale(picture, \
 		(int(picture.get_width()*resize), int(picture.get_height()*resize)))
 		self.size = (self.image.get_width(), self.image.get_height())
-		self.position = position
-		self.friction = friction
+		self.position = (position[0] - self.size[0]/2 , position[1] - self.size[1]/2)
 		self.id = identification
+		self.support = None
 		# Precisa de bond também
 
 	def print_ground(self, screen):
 		screen.blit(self.image, self.position)
+		self.support.print_support(screen)
 
-	# função para atrito
+	def genSupport(self, positionRelX, friction):
+		if positionRelX < 0 or positionRelX > 100:
+			exit(0)
+
+		positionX = self.position[0] + self.size[0]*(positionRelX/100)
+		self.support = support((positionX, self.position[1]), friction)
 
 # Objeto que junta barras
 class bond(object):
@@ -421,6 +440,10 @@ class bond(object):
 		self.radius = 20
 		self.joints = []
 		self.others = []
+
+	# Altera posicao da juncao manualmente
+	def setPosition(self, position):
+		self.position = position
 
 	# Cria vinculo com objeto do tipo juncao que esteja tocando
 	def change_bond_status(self, bonds):
@@ -446,6 +469,32 @@ class bond(object):
 		else:
 			pygame.draw.circle(screen, (0, 0, 0), (int(self.position[0]), \
 			int(self.position[1])), int(self.radius), 1)
+
+class support(object):
+
+	controlID = -1
+
+	def __init__(self, position, friction):
+		self.friction = friction
+		self.getImage()
+		self.position  = (position[0], position[1] - self.image.get_height())
+		self.specialBond = bond(support.controlID)
+		support.controlID -= 1
+		self.specialBond.setPosition((self.position[0] + self.image.get_width()/2, self.position[1]))
+
+	def getImage(self):
+		if self.friction:
+			image = resources[6]
+		else:
+			image = resources[7]
+
+		resize = 0.40
+		self.image = pygame.transform.scale(image, (int(image.get_width()*resize)\
+		, int(image.get_height()*resize)))
+
+	def print_support(self, screen):
+		screen.blit(self.image, self.position)
+		self.specialBond.print_bond(screen)
 
 # Temporizador
 class timerObject(object):
