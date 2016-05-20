@@ -1,8 +1,6 @@
-//Os comentarios mostra como deve fazer o programa
-
 package PEF;
 
-/* Descobrir a matriz de adjacencia do grafo,
+/* Descobri a matriz de adjacencia do grafo,
  * 
  * Em cada nó, criar um vetor "linhaxcoluna" = 
  * 							   = 2x"numero de forcas == numero de nos adjacentes"
@@ -54,14 +52,14 @@ package PEF;
  * 
  * Depois, faca a inversa de M e multiplique pelos pesos (x e y) de cada nó para descobrir as forcas. Exemplo
  * 
- * |F1.| 			        |Px1|
- * |F2.|		     	    |Py1|
- * |F3.|     		  	  |Px2|
+ * |F1.| 			  |Px1|
+ * |F2.|			  |Py1|
+ * |F3.|		  	  |Px2|
  * |F4.| =  M⁻¹   *   |Py2|
- * |Rx1|			        |Px3|
- * |Ry1|			        |Py3|
- * |Rx4|			        |Px4|
- * |Ry4|			        |Py4|
+ * |Rx1|			  |Px3|
+ * |Ry1|			  |Py3|
+ * |Rx4|			  |Px4|
+ * |Ry4|			  |Py4|
  * 
  * E cabou =)
  * 
@@ -69,42 +67,92 @@ package PEF;
 
 public class NOVO {
 	
+	double[] forca_em_X;
+	double[] forca_em_Y;
+	int numero_de_forcas; 
+	double[] angulos;
 	
-	// Todo nó tera um
-	public NOVO(int numero_de_forcas, double[] angulos, int numero_do_no){
-		double[] peso_em_X = new double[numero_de_forcas];
-		double[] peso_em_Y = new double[numero_de_forcas];
-		for(int i = 0; i < numero_de_forcas; i++){
-			peso_em_X[i] = -Math.cos(angulos[i]);
-			peso_em_Y[i] = -Math.sin(angulos[i]);
-		}
-		
-	}
+	boolean restricao;
+	int numero_de_restricoes; 
+	int local_da_restricao;
+	
+	double[] R_em_X;
+	double[] R_em_Y;
+	
+	boolean peso;
+	double peso_em_X;
+	double peso_em_Y;
+	
+	
+	
 	// Todo nó no solo tera um
-	public NOVO(int numero_de_forcas, double[] angulos, int klj, int numero_de_restricoes){
-		double[] peso_em_X = new double[numero_de_forcas];
-		double[] peso_em_Y = new double[numero_de_forcas];
+	
+	public NOVO(double[] forcas, int numero_de_forcas, double[] angulos,
+				boolean restricao, int numero_de_restricoes, int local_da_restricao,
+				boolean peso, double peso_em_X, double peso_em_Y){
+		
+		this.numero_de_forcas = numero_de_forcas;
+		this.numero_de_restricoes = numero_de_restricoes;
+		
 		for(int i = 0; i < numero_de_forcas; i++){
-			peso_em_X[i] = Math.cos(180 + angulos[i]);
-			peso_em_Y[i] = Math.cos(90 + angulos[i]);
+			this.forca_em_X[i] = -forcas[i]*Math.cos(angulos[i]);
+			this.forca_em_Y[i] = -forcas[i]*Math.sin(angulos[i]);
+		}
+		// Caso tenha alguma restricao
+		
+		this.restricao = restricao;
+		if(this.restricao == true){// No Java, a matriz ja se inicializa zerada
+			this.R_em_X = new double[numero_de_restricoes];
+			this.R_em_Y = new double[numero_de_restricoes];
+			this.R_em_X[local_da_restricao] = 1;
+			this.R_em_Y[local_da_restricao+1] = 1;
+		}
+		else{// No Java, a matriz ja se inicializa zerada
+			this.R_em_X = new double[2*numero_de_restricoes]; 
+			this.R_em_Y = new double[2*numero_de_restricoes];
 		}
 		
-		double[] R_em_X = new double[2*numero_de_restricoes];
-		double[] R_em_Y = new double[2*numero_de_restricoes];
-		if(numero_de_restricoes == 0){
-			R_em_X[0] = 1
-			R_em_Y[1] = 1
+		// Caso tenha alguma forca aplicada
+		this.peso = peso;
+		if(this.peso == true){
+			this.peso_em_X = peso_em_X; 
+			this.peso_em_Y = peso_em_Y;
 		}
 		else{
-			R_em_X[2] = 1
-			R_em_Y[3] = 1
+			this.peso_em_X = 0.0; 
+			this.peso_em_Y = 0.0;
 		}
 	}
 	
-	double[] vetor_pesos = new double [/*2x numero de nos*/8];
-	double[] vetorforcas = new double [/*2x numero de nos*/8];
-	double[][] matriz_B = new double[8][8];
+	double[] fazedora_de_resultados(){
+		// nao sei se esta certo
+		double[][] matriz= new double[this.numero_de_forcas+ this.numero_de_restricoes][this.numero_de_forcas+ this.numero_de_restricoes];
+		
+		// qualquer coisa da um printf aqui -_> System.out.println("Num. de Linhas:"+ matriz.length +"\n Num. de Colunas:"+matriz[0].length);
+		//
+		// Agora, tem que fazer isso daqui
+		//
+		// * 
+		// * | matriz forcas nó'1' : matriz de restricao nó'1' |
+		// * | matriz forcas nó'2' : matriz de restricao nó'2' |
+		// * | matriz forcas nó'3' : matriz de restricao nó'3' | = M
+		// * | ..................  : ........................  |
+		// * | matriz forcas nó'n' : matriz de restricao nó'n' |
+		// * 
+		double[] vetor_final = new double[this.numero_de_forcas+ this.numero_de_restricoes];
+		// * |F1.| 			  |Px1|
+		// * |F2.|			  |Py1|
+		// * |F3.|		  	  |Px2|
+		// * |F4.| =  M⁻¹  *  |Py2|
+		// * |Rx1|			  |Px3|
+		// * |Ry1|			  |Py3|
+		// * |Rx4|			  |Px4|
+		// * |Ry4|			  |Py4|
+		// * 
+		
+		
+		
+		return vetor_final;
+	}
 	
-	
-
 }
