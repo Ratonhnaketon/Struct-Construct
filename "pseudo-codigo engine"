@@ -1,0 +1,110 @@
+//Os comentarios mostra como deve fazer o programa
+
+package PEF;
+
+/* Descobrir a matriz de adjacencia do grafo,
+ * 
+ * Em cada nó, criar um vetor "linhaxcoluna" = 
+ * 							   = 2x"numero de forcas == numero de nos adjacentes"
+ * 
+ * Sendo que:
+ * -> a primeira linha == Px;
+ * -> a segunda linha == Py.
+ * 
+ * Multiplicar cada linha desta forma (exemplo)
+ *    (utilizando o eixo x como referencia)
+ * 
+ * (Px) -> | cos(180+ a)   cos(180+ b)   cos(180+ c)   cos(180+ d) |
+ * (Py) -> | cos(90 + a)   cos(90 + b)   cos(90 + c)   cos(90 + d) |
+ * 
+ * Sendo que {a,b,c,d} sao os angulos das respectivas forcas [F12, F13, F23, F34] SEMPRE NESTA ORDEM.
+ * Para descobrir se elas existem no nó, pegue a coluna, ou linha, da matriz de adjacencia. 
+ * 
+ * Junto dos nos, tambem é necessario saber se ele possui alguma restricao e que restricao
+ * ela é. Por exemplo, em uma ponte que possui restricoes dos dois lados da ponte nos nós 1 e 4
+ *  
+ *  No nó 1
+ *           <- |Rx1|
+ * |1 0 0 0| <- |Ry1| 
+ * |0 1 0 0| <- |Rx4| 
+ *           <- |Ry4| 
+ *
+ * No nó 4
+ *           <- |Rx1|
+ * |0 0 1 0| <- |Ry1| 
+ * |0 0 0 1| <- |Rx4| 
+ *           <- |Ry4| 
+ *         
+ * Os outros nos terao uma MATRIZ ZERADA
+ *   
+ *           
+ * E só falta, descobrir qual nó posssue peso e se este esta no eixo x ou no eixo y
+ *
+ *******************************************************************************************************
+ *
+ * Depois disso tudo, junte as matrizes em uma matriz grande 2nx2n, sendo que  
+ * se deva arranjar a matriz dessa forma:
+ * 
+ * | matriz forcas nó'1' : matriz de restricao nó'1' |
+ * | matriz forcas nó'2' : matriz de restricao nó'2' |
+ * | matriz forcas nó'3' : matriz de restricao nó'3' | = M
+ * | ..................  : ........................  |
+ * | matriz forcas nó'n' : matriz de restricao nó'n' |
+ * 
+ * 
+ * Depois, faca a inversa de M e multiplique pelos pesos (x e y) de cada nó para descobrir as forcas. Exemplo
+ * 
+ * |F1.| 			        |Px1|
+ * |F2.|		     	    |Py1|
+ * |F3.|     		  	  |Px2|
+ * |F4.| =  M⁻¹   *   |Py2|
+ * |Rx1|			        |Px3|
+ * |Ry1|			        |Py3|
+ * |Rx4|			        |Px4|
+ * |Ry4|			        |Py4|
+ * 
+ * E cabou =)
+ * 
+ * */
+
+public class NOVO {
+	
+	
+	// Todo nó tera um
+	public NOVO(int numero_de_forcas, double[] angulos, int numero_do_no){
+		double[] peso_em_X = new double[numero_de_forcas];
+		double[] peso_em_Y = new double[numero_de_forcas];
+		for(int i = 0; i < numero_de_forcas; i++){
+			peso_em_X[i] = -Math.cos(angulos[i]);
+			peso_em_Y[i] = -Math.sin(angulos[i]);
+		}
+		
+	}
+	// Todo nó no solo tera um
+	public NOVO(int numero_de_forcas, double[] angulos, int klj, int numero_de_restricoes){
+		double[] peso_em_X = new double[numero_de_forcas];
+		double[] peso_em_Y = new double[numero_de_forcas];
+		for(int i = 0; i < numero_de_forcas; i++){
+			peso_em_X[i] = Math.cos(180 + angulos[i]);
+			peso_em_Y[i] = Math.cos(90 + angulos[i]);
+		}
+		
+		double[] R_em_X = new double[2*numero_de_restricoes];
+		double[] R_em_Y = new double[2*numero_de_restricoes];
+		if(numero_de_restricoes == 0){
+			R_em_X[0] = 1
+			R_em_Y[1] = 1
+		}
+		else{
+			R_em_X[2] = 1
+			R_em_Y[3] = 1
+		}
+	}
+	
+	double[] vetor_pesos = new double [/*2x numero de nos*/8];
+	double[] vetorforcas = new double [/*2x numero de nos*/8];
+	double[][] matriz_B = new double[8][8];
+	
+	
+
+}
