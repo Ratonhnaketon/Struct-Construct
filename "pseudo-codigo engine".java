@@ -108,8 +108,8 @@ public class NOVO {
 			this.R_em_Y[local_da_restricao+1] = 1;
 		}
 		else{// No Java, a matriz ja se inicializa zerada
-			this.R_em_X = new double[2*numero_de_restricoes]; 
-			this.R_em_Y = new double[2*numero_de_restricoes];
+			this.R_em_X = new double[numero_de_restricoes]; 
+			this.R_em_Y = new double[numero_de_restricoes];
 		}
 		
 		// Caso tenha alguma forca aplicada
