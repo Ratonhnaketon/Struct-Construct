@@ -15,3 +15,5 @@ TijoloLayout = pygame.image.load(path + "tijolo" + exten)  # 4
 wood_stick = pygame.image.load(path + "wood_stick" + exten)  # 5
 apoioFixo = pygame.image.load(path + "apoioFixo" + exten)  # 6
 apoioSimples = pygame.image.load(path + "apoioSimples" + exten)  # 7
+credits = pygame.image.load(path + "credits" + exten) # 8
+youwin = pygame.image.load(path + "youwin" + exten) # 9

@@ -51,13 +51,16 @@ def run(conf, resources):
 	(screen.get_width()/2 - resources[1].get_width()/2 , screen.get_height()/2 - 25), 9)
 	nine = button(resources[1], font.render("9", True,  (255, 255, 255)), \
 	(screen.get_width()/2 + 60, screen.get_height()/2 - 25), 10)
+	thanksTo = layout(resources[8], font.render("",\
+	True,  (0, 0, 0)), (screen.get_width()/2 - resources[8].get_width()/2, resources[1].get_height()/2 + 100))
+	
 	GameModes = layout(resources[1], font.render("Game Modes", True,  (255, 255, 255)), (screen.get_width()/2 - resources[1].get_width()/2, resources[1].get_height()/2 + 100))
 	Settings_Layout = layout(resources[1], font.render("Settings", True,  (255, 255, 255)), (screen.get_width()/2 - resources[1].get_width()/2, resources[1].get_height()/2))
 	Challenges = layout(resources[1], font.render("Challenges", True,  (255, 255, 255)), (screen.get_width()/2 - resources[1].get_width()/2, resources[1].get_height()/2 + 100))
-	Credits_Layout = layout(resources[1], font.render("Credits", True,  (255, 255, 255)), (screen.get_width()/2 - resources[1].get_width()/2, resources[1].get_height()/2))
+	Credits_Layout = layout(resources[1], font.render("Credits", True,  (255, 255, 255)), (screen.get_width()/2 - resources[1].get_width()/2, resources[1].get_height()/2))	
 	first_menu = Stage(resources[0], (Start, Settings, Credits, Exit), (), conf["size"])
 	second_menu = Stage(resources[0], (Return, SCREEN_MODE, RESOLUTION), (Settings_Layout,), conf["size"])
-	third_menu = Stage(resources[0], (Return,), (Credits_Layout,), conf["size"])
+	third_menu = Stage(resources[0], (Return,), (Credits_Layout, thanksTo), conf["size"])
 	mode_game = Stage(resources[0], (Return, ModeOne, ModeTwo), (GameModes,), conf["size"])
 	select_challenge = Stage(resources[0], (Return, one, two, three, four, five, six, seven, \
 	eight, nine), (Challenges,), conf["size"])

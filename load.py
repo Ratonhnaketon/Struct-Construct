@@ -57,7 +57,7 @@ def read_conf(f):
 def load_everthing():
 	return [images.background_menu, images.Menubutton, images.seta, 
 	images.GameMenu_menu, images.TijoloLayout, images.wood_stick, images.apoioFixo, 
-	images.apoioSimples]
+	images.apoioSimples, images.credits, images.youwin]
 
 def change_conf(info, option):
 	if(option == 100):

@@ -3,11 +3,10 @@ class motor(object):
 	def __init__(self, n, elements):
 		self.n = n
 		self.elements = elements
-		self.graph = []
 		# Declaracao de matriz
 		# Matrix = [[0 for x in range(w)] for y in range(h)] 
 
-	def genMatriz(graph):
+	def genMatriz(self, ):
 		pass
 
 	# Adiciona um 'peso' em um dos nos da estrutura aleatoriamente

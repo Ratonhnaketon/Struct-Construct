@@ -137,12 +137,12 @@ class gameStage(Stage):
 				timer.setTime(21)
 				self.createBar(5)
 		else:
-			self.createBar(10)
+			self.createBar(16)
 
 		self.createGround([[0, screen.get_height()], \
 		[screen.get_width(), screen.get_height()]])
 		self.grounds[0].genSupport(70, 1)
-		self.grounds[1].genSupport(30, 0)
+		self.grounds[1].genSupport(10, 0)
 		self.generateBonds()
 		try:
 			timer.start()
@@ -207,6 +207,11 @@ class gameStage(Stage):
 			except:
 				pass
 			
+
+			if not running:
+				image = pygame.transform.scale(resources[9], \
+				(int(screen.get_width()), int(screen.get_height())))
+				screen.blit(image, (0, 50))
 			cursor = pygame.mouse.get_pos()
 			if len(objectList) > 0:
 				if keys[0]:
@@ -418,7 +423,6 @@ class groundObject(object):
 		self.position = (position[0] - self.size[0]/2 , position[1] - self.size[1]/2)
 		self.id = identification
 		self.support = None
-		# Precisa de bond também
 
 	def print_ground(self, screen):
 		screen.blit(self.image, self.position)
@@ -450,7 +454,7 @@ class bond(object):
 		for bond in bonds:
 			r = math.sqrt((self.position[0] - bond.position[0])**2 + \
 			(self.position[1] - bond.position[1])**2)
-			if 2*self.radius >= int(r) and not int(r) == 0:
+			if 2*self.radius >= int(r) and not self.id == bond.id:
 				remove = False
 				for joint in self.joints:
 					if joint == bond:
