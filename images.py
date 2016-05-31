@@ -17,3 +17,4 @@ apoioFixo = pygame.image.load(path + "apoioFixo" + exten)  # 6
 apoioSimples = pygame.image.load(path + "apoioSimples" + exten)  # 7
 credits = pygame.image.load(path + "credits" + exten) # 8
 youwin = pygame.image.load(path + "youwin" + exten) # 9
+youlose = pygame.image.load(path + "gameover" + exten) # 10

@@ -56,6 +56,7 @@ class gameStage(Stage):
 		self.bars = []
 		self.bonds = []
 		self.grounds = []
+		self.numberBonds = 0
 
 	# Guarda todos os objetos do tipo juncao
 	def generateBonds(self):
@@ -103,6 +104,7 @@ class gameStage(Stage):
 	# Loop Central
 	def execute_menu(self, screen, conf):
 		pygame.font.init()
+		engine = motor()
 		running = True
 		keys = [False, False, False]
 		if self.gameMode > 0:
@@ -137,7 +139,7 @@ class gameStage(Stage):
 				timer.setTime(21)
 				self.createBar(5)
 		else:
-			self.createBar(16)
+			self.createBar(30)
 
 		self.createGround([[0, screen.get_height()], \
 		[screen.get_width(), screen.get_height()]])
@@ -150,10 +152,11 @@ class gameStage(Stage):
 			pass
 		
 		while True:
-			screen.fill(0)		
+			screen.fill(0)
 			self.print_stage(screen, conf)
 			self.print_ground(screen)
 			self.print_bars(screen)
+			engine.printResult(screen)
 			command = self.detect_button()
 			if running:
 				objectList = self.detectBar()
@@ -174,7 +177,6 @@ class gameStage(Stage):
 						if command == 5:
 							running = False
 							objectList = []
-							# engine = motor()
 							elements = []
 						else:
 							return command
@@ -204,20 +206,25 @@ class gameStage(Stage):
 					timer.finish()
 					running = False
 					objectList = []
+
 			except:
 				pass
 			
 
 			if not running:
-				image = pygame.transform.scale(resources[9], \
-				(int(screen.get_width()), int(screen.get_height())))
-				screen.blit(image, (0, 50))
+				engine.genMatriz(self.bonds, self.numberBonds)
+				engine.solution()
+
 			cursor = pygame.mouse.get_pos()
 			if len(objectList) > 0:
 				if keys[0]:
 					objectList[0].move(cursor)
 				if keys[1]:
-					objectList[1].change_bond_status(self.bonds)
+					if objectList[1].change_bond_status(self.bonds):
+						self.numberBonds -= 1
+					else:
+						self.numberBonds += 1
+
 					keys[1] = False
 				if keys[2]:
 					objectList[0].rotate(cursor)
@@ -316,7 +323,7 @@ class conf_button(button):
 
 class barObject(object):
 
-	controlID = 0
+	controlID = 1
 
 	def __init__(self, identification):
 		picture = resources[5]
@@ -437,6 +444,7 @@ class groundObject(object):
 
 # Objeto que junta barras
 class bond(object):
+
 	def __init__(self, identification):
 		self.position = (0, 0)
 		self.active = 0
@@ -451,20 +459,22 @@ class bond(object):
 
 	# Cria vinculo com objeto do tipo juncao que esteja tocando
 	def change_bond_status(self, bonds):
+		remove = False
 		for bond in bonds:
 			r = math.sqrt((self.position[0] - bond.position[0])**2 + \
 			(self.position[1] - bond.position[1])**2)
 			if 2*self.radius >= int(r) and not self.id == bond.id:
-				remove = False
 				for joint in self.joints:
 					if joint == bond:
 						remove = True
 						self.joints.remove(bond)
 						bond.joints.remove(self)
 				
-				if not remove:		
+				if not remove:
 					self.joints.append(bond)
 					bond.joints.append(self)
+
+		return remove
 
 	def print_bond(self, screen):
 		if len(self.joints) > 0:
